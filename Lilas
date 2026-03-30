@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Lilas 💔</title>
+
+<style>
+body {
+    margin: 0;
+    overflow: hidden;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Bouton */
+#btn {
+    padding: 20px 40px;
+    font-size: 20px;
+    background: red;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+/* Texte romantique */
+#text {
+    position: absolute;
+    top: 40%;
+    font-size: 50px;
+    color: pink;
+    font-family: "Brush Script MT", cursive;
+    display: none;
+}
+
+/* Coeurs */
+.heart {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: red;
+    transform: rotate(45deg);
+}
+
+.heart::before,
+.heart::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: red;
+    border-radius: 50%;
+}
+
+.heart::before {
+    top: -10px;
+    left: 0;
+}
+
+.heart::after {
+    left: -10px;
+    top: 0;
+}
+</style>
+</head>
+
+<body>
+
+<button id="btn">Clique moi</button>
+<div id="text">Lilas je t'aime ❤️</div>
+
+<script>
+const btn = document.getElementById("btn");
+const text = document.getElementById("text");
+
+btn.onclick = () => {
+    btn.style.display = "none";
+    text.style.display = "block";
+
+    // créer plein de coeurs
+    for (let i = 0; i < 50; i++) {
+        createHeart();
+    }
+};
+
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+
+    document.body.appendChild(heart);
+
+    // position random
+    heart.style.left = Math.random() * window.innerWidth + "px";
+    heart.style.top = Math.random() * window.innerHeight + "px";
+
+    let xSpeed = (Math.random() - 0.5) * 10;
+    let ySpeed = (Math.random() - 0.5) * 10;
+
+    function move() {
+        let x = heart.offsetLeft + xSpeed;
+        let y = heart.offsetTop + ySpeed;
+
+        // rebond murs
+        if (x <= 0 || x >= window.innerWidth - 20) xSpeed *= -1;
+        if (y <= 0 || y >= window.innerHeight - 20) ySpeed *= -1;
+
+        heart.style.left = x + "px";
+        heart.style.top = y + "px";
+
+        requestAnimationFrame(move);
+    }
+
+    move();
+}
+</script>
+
+</body>
+</html>
