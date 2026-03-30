@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Lilas ❤️</title>
+
+<style>
+body {
+    margin: 0;
+    overflow: hidden;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: cursive;
+}
+
+/* Bouton principal */
+#btn {
+    padding: 20px 40px;
+    font-size: 20px;
+    background: red;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 0 20px red;
+}
+
+/* Texte */
+#text {
+    position: absolute;
+    top: 30%;
+    font-size: 50px;
+    color: pink;
+    display: none;
+    text-shadow: 0 0 20px pink;
+    animation: fadeIn 1s ease;
+}
+
+/* Boutons secondaires */
+.controls {
+    position: absolute;
+    bottom: 50px;
+    display: none;
+    gap: 20px;
+}
+
+.controls button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background: white;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0; transform: scale(0.8);}
+    to {opacity: 1; transform: scale(1);}
+}
+
+/* Coeurs */
+.heart {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: red;
+    transform: rotate(45deg);
+}
+
+.heart::before,
+.heart::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: red;
+    border-radius: 50%;
+}
+
+.heart::before { top: -10px; }
+.heart::after { left: -10px; }
+</style>
+</head>
+
+<body>
+
+<button id="btn">Clique moi ❤️</button>
+
+<div id="text">Lilas je t'aime</div>
+
+<div class="controls">
+    <button onclick="restart()">S’aimer à nouveau 🔁</button>
+    <button onclick="nextPhrase()">Changer la phrase 💭</button>
+</div>
+
+<script>
+const btn = document.getElementById("btn");
+const text = document.getElementById("text");
+const controls = document.querySelector(".controls");
+
+let phrases = [
+"Lilas je t'aime ❤️",
+"nous deux, c'est pour toujours princesse (t'as pas le choix ^^)",
+"t'es coincée avec moi maintenant 😏",
+"j'abandonne jamais toi",
+"c’est toi ou rien",
+"on écrit une histoire là"
+];
+
+let index = 0;
+let hearts = [];
+
+btn.onclick = start;
+
+function start() {
+    btn.style.display = "none";
+    text.style.display = "block";
+    controls.style.display = "flex";
+
+    createHearts(60);
+}
+
+function createHearts(n) {
+    for (let i = 0; i < n; i++) {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+
+        document.body.appendChild(heart);
+
+        heart.x = Math.random() * window.innerWidth;
+        heart.y = Math.random() * window.innerHeight;
+        heart.vx = (Math.random() - 0.5) * 6;
+        heart.vy = (Math.random() - 0.5) * 6;
+
+        hearts.push(heart);
+    }
+
+    animate();
+}
+
+function animate() {
+    hearts.forEach(h => {
+        h.x += h.vx;
+        h.y += h.vy;
+
+        // gravité légère
+        h.vy += 0.1;
+
+        // rebond murs
+        if (h.x <= 0 || h.x >= window.innerWidth - 20) h.vx *= -1;
+        if (h.y >= window.innerHeight - 20) {
+            h.vy *= -0.9;
+            h.y = window.innerHeight - 20;
+        }
+
+        h.style.left = h.x + "px";
+        h.style.top = h.y + "px";
+        h.style.transform = `rotate(${h.x}deg)`;
+    });
+
+    requestAnimationFrame(animate);
+}
+
+function restart() {
+    hearts.forEach(h => h.remove());
+    hearts = [];
+    createHearts(60);
+}
+
+function nextPhrase() {
+    index++;
+    if (index >= phrases.length) index = 0;
+    text.innerText = phrases[index];
+}
+</script>
+
+</body>
+</html>
